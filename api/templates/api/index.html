@@ -1,0 +1,43 @@
+{% extends 'api/base.html' %}
+
+{% block body %}
+<div class="container">
+
+    <h1>Welcome to the House of Music</h1>
+    <a href="{% url 'create_room' %}" class="btn btn-primary">Create a Room</a>
+    <a class="btn btn-secondary" onclick="toggleModal()">Join a Room</a>
+
+    <!-- Join room form popped up form -->
+    <div id="join_room_modal" class ="modal">
+        <div class="modal-content">
+            <!-- Form content -->
+            <span class="close">&times;</span>
+
+            <form method="POST" class="modal-body" action="{% url 'join_room' %}">
+                {% csrf_token %}
+                <input type="text" name="room_code">
+                <input type="submit" class="btn-primary">
+            </form>
+        </div>
+    </div>
+
+   
+</div>
+<script>
+    var join_room_modal = document.getElementById("join_room_modal");
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = () => {
+        join_room_modal.style.display = "none";
+    }
+    
+    function toggleModal() {
+        join_room_modal.style.display = "block";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == join_room_modal) {
+            join_room_modal.style.display = "none";
+        }
+    }
+</script>
+{% endblock %}
