@@ -17,25 +17,24 @@
 
 <script src="{% static 'api/fetch_current_song.js' %}"></script>
 
+
+
 <script>
     document.addEventListener("DOMContentLoaded", ()=>{
-        console.log(`{{is_host}}`);
         if (`{{is_host}}`=='True') {
             console.log("Hey! Hello host");
-            authenticateSpotify()
+            authenticateSpotify(`{{room.code}}`);
 
         }
         
         
     })
-    function authenticateSpotify() {
-        fetch('/spotify/is-authenticated', {
-            method: "GET",
-        })
+    function authenticateSpotify(room_code) {
+        fetch(`/spotify/is-authenticated/${room_code}`)
         .then (response => response.json())
         .then (data => {
 
-            console.log(data["status"]);
+            console.log("STATUS", data["status"]);
 
             if (! data.status) {
                 fetch('/spotify/get-auth-url', {

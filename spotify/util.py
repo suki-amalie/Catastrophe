@@ -67,7 +67,7 @@ def refresh_spotify_token(session_id):
     
 def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
     tokens = get_user_tokens(session_id)
-    #print(bcolors.WARNING + f"GET USER TOKEN: {tokens}" + bcolors.ENDC)
+    print(bcolors.WARNING + f"GET HOST TOKEN: {tokens.access_token}" + bcolors.ENDC)
     # How to send correct authorization to Spotify, check documentation
     headers = {'Content-Type': 'application/json',
               'Authorization': "Bearer " + tokens.access_token}
@@ -78,6 +78,7 @@ def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
     if put_:
         post(url, headers=headers)
     response = get(url, {}, headers=headers)
+    print(bcolors.WARNING + f"{response}" + bcolors.ENDC)
     try:
         return response.json()
     except:

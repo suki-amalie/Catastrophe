@@ -55,8 +55,14 @@ def spotify_callback(request, format=None):
   return redirect('api:index')
 
 class IsAuthenticated(APIView):
-    def get(self, request, format=None):
+    def get(self, request, room_code, format=None):
         is_authenticated = is_spotify_authenticated(self.request.session.session_key)
+        print(bcolors.WARNING + "ROOM CODE:" + room_code + bcolors.ENDC)
+
+        room = Room.objects.get(code=room_code)
+        room.host_session_key = self.request.session.session_key
+        room.save()
+        print(bcolors.WARNING + "INITIAL HOST SESSION KEY:" + room.host_session_key + bcolors.ENDC)
 
         return Response({'status': is_authenticated}, status=status.HTTP_200_OK)
     
@@ -68,11 +74,13 @@ class CurrentSong(APIView):
          room = room[0]
       else:
          return Response({'error': 'room not found'}, status=status.HTTP_404_NOT_FOUND)
-      host = room.host
+      host_session_key = room.host_session_key
+      print(bcolors.WARNING + "HOST SESSION KEY: " + host_session_key + bcolors.ENDC)
       endpoint = "player/currently-playing"
       response = execute_spotify_api_request(
-        self.request.session.session_key, endpoint
+        host_session_key, endpoint
       )
+      print(bcolors.WARNING + "SONG RESPONSE: " + f"{response.get('item')}" + bcolors.ENDC)
 
       if 'error' in response or 'item' not in response:
         return Response({'error': 'no return data'}, status=status.HTTP_204_NO_CONTENT)
