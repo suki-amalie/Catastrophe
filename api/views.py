@@ -5,6 +5,8 @@ from rest_framework import generics
 from .models import Room
 from .forms import RoomForm
 from .serializers import RoomSerializer
+from .util import get_random_code
+
 
 # Create your views here.
 def index(request):
@@ -15,7 +17,9 @@ def create_room(request):
         form = RoomForm(request.POST)
         if form.is_valid():
             room = form.save()
-            return redirect('room_detail', room_code=room.code)
+            request.session['host'] = room.host
+            request.session['room_code'] = room.code
+            return redirect('api:room_detail', room_code=room.code)
     else:
         form = RoomForm()
 
@@ -23,13 +27,16 @@ def create_room(request):
 
 def room_detail(request, room_code):
     room = get_object_or_404(Room, code=room_code)
-    return render(request, 'api/room_detail.html', {'room': room})
+    
+    is_host = request.session.get('host', None) == room.host
+
+    return render(request, 'api/room_detail.html', {'room': room, 'is_host': is_host})
 
 def join_room(request):
     if request.method == 'POST':
         room_code = request.POST["room_code"]
-        return redirect("room_detail", room_code=room_code)
-    return redirect("index")
+        return redirect("api:room_detail", room_code=room_code)
+    return redirect("api:index")
 
 class CreateRoomView(generics.CreateAPIView):
     queryset = Room.objects.all()

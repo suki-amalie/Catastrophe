@@ -4,7 +4,7 @@
 <div class="container">
 
     <h1>Welcome to the House of Music</h1>
-    <a href="{% url 'create_room' %}" class="btn btn-primary">Create a Room</a>
+    <a href="{% url 'api:create_room' %}" class="btn btn-primary">Create a Room</a>
     <a class="btn btn-secondary" onclick="toggleModal()">Join a Room</a>
 
     <!-- Join room form popped up form -->
@@ -13,7 +13,7 @@
             <!-- Form content -->
             <span class="close">&times;</span>
 
-            <form method="POST" class="modal-body" action="{% url 'join_room' %}">
+            <form method="POST" class="modal-body" action="{% url 'api:join_room' %}">
                 {% csrf_token %}
                 <input type="text" name="room_code">
                 <input type="submit" class="btn-primary">

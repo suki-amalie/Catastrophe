@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'api',
     'rest_framework',
+    'spotify',
     
     'django.contrib.admin',
     'django.contrib.auth',

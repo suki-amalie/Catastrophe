@@ -1,0 +1,16 @@
+{% extends 'api/base.html' %}
+
+{% block body %}
+<a class="btn btn-info" href="{% url 'api:index' %}">Go Back</a>
+
+<div>
+
+    <h2>Create a Room</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Create Room</button>
+    </form>
+</div>
+
+{% endblock %}

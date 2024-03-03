@@ -1,9 +1,5 @@
 from django.db import models
-import uuid
-
-def get_random_code(length):
-    code = str(uuid.uuid4())[:length].replace('-', '').lower()
-    return code
+from .util import get_random_code
 
 def generate_unique_code():
     while True:
